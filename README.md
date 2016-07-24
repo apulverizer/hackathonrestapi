@@ -15,6 +15,10 @@ Recommend installing Anaconda3 as this will have all dependencies other than Fla
 
 ## How to use to?
 
+First change the path to the database in the config.py to point to a location on your machine; you don't have to make the database, just point to where you want it to be created and give it a name.
+```python
+SQLALCHEMY_DATABASE_URI = r"sqlite:///C:\Users\aaro8157\Documents\SourceCode\hackathonrestapi\database.db"
+```
 If you are running it locally, you will need to first hit the localhost:5000/api/createData. This will create the sqlite db and seed it with a bunch of sample data.
 
 ```python
