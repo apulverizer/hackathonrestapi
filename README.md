@@ -9,9 +9,10 @@
 * Requests
 * SQLAlchemy
 * Flask_sqlalchemy
+* Flask_cors
 
 
-Recommend installing Anaconda3 as this will have all dependencies other than Flask_sqlalchemy which you can install with "pip install flask_sqlalchemy"
+Recommend installing Anaconda3 as this will have all dependencies other than Flask_sqlalchemy and Flask_cors which you can install with "pip install flask_sqlalchemy" "pip install -U flask-cors"
 
 ## How to use to?
 
