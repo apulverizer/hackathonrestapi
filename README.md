@@ -144,7 +144,7 @@ python runserver.py
 
 ----
 
-*\<host\>:\<port\>/api/campsites/\<campsiteID\>/update/ POST
+* \<host\>:\<port\>/api/campsites/\<campsiteID\>/update/ POST
 This will update the provided campsite.
 Required form parameters:
   - availablePersons (Integer)
@@ -161,7 +161,7 @@ Returns the campsite info as shown above
  
  ----
  
-*\<host\>:\<port\>/api/campsites/\<campsiteID\>/add/ POST
+* \<host\>:\<port\>/api/campsites/\<campsiteID\>/add/ POST
 This will update the provided campsite.
 Required form parameters:
   - availablePersons (Integer)
@@ -174,7 +174,7 @@ Returns the campsite info as shown above
 
 ----
 
-*\<host\>:\<port\>/api/users/\<userID\>/
+* \<host\>:\<port\>/api/users/\<userID\>/
 This returns the users information
 
 ```json
@@ -192,7 +192,7 @@ This returns the users information
 }
 ```
 
-*\<host\>:\<port\>/api/users/\<userID\>/add/ POST
+* \<host\>:\<port\>/api/users/\<userID\>/add/ POST
 This adds a user (checks for unique username and email)
 Required form parameters:
   - username (string)
@@ -206,7 +206,7 @@ Returns the users json as above.
 
 ----
 
-*\<host\>:\<port\>/api/users/\<userID\>/update/ POST
+* \<host\>:\<port\>/api/users/\<userID\>/update/ POST
 This adds a user (checks for unique username and email)
 Required form parameters:
   - firstName(string)
