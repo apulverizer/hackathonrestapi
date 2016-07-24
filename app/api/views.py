@@ -65,36 +65,90 @@ def populate_db():
         phone = "987654321",
         password = "12345",
     )
+    user3 = models.User(
+        username="jill123",
+        firstName="Jill",
+        lastName="Smith",
+        email="jill123@gmail.com",
+        phone="987123456",
+        password="12345",
+    )
+    user4 = models.User(
+        username="joethecooluser",
+        firstName="Joe",
+        lastName="Cool",
+        email="joethecooluser@gmail.com",
+        phone="321456987",
+        password="12345",
+    )
+    user5 = models.User(
+        username="gregg123",
+        firstName="Bob",
+        lastName="Cool",
+        email="gregg123@gmail.com",
+        phone="098712345",
+        password="12345",
+    )
+
     db.session.add(user1)
     db.session.add(user2)
-    for i in range(1,1301):
-        campsite1 = models.Campsite(
-            availablePersons = 3,
-            parkID = i,
-            hostID = 1,
-            startDate = datetime(2016,8,i%31+1),
-            endDate = datetime(2016,8,31),
-            status = "open"
-        )
-        campsite2 = models.Campsite(
-            availablePersons = 2,
-            parkID = i,
-            hostID = 2,
-            startDate = datetime(2016,8,i%31+1),
-            endDate = datetime(2016,8,31),
-            status = "closed"
-        )
-        campsite3 = models.Campsite(
-            availablePersons=2,
-            parkID=i,
-            hostID=2,
-            startDate=datetime(2016, 6, 28),
-            endDate=datetime(2016, 7, 1),
-            status="closed"
-        )
-        db.session.add(campsite1)
-        db.session.add(campsite2)
-        db.session.add(campsite3)
+    db.session.add(user3)
+    db.session.add(user4)
+    db.session.add(user5)
+    campsite1 = models.Campsite(
+        availablePersons = 3,
+        parkID = 5,
+        hostID = 1,
+        startDate = datetime(2016,8,15),
+        endDate = datetime(2016,8,31),
+        status = "open"
+    )
+    campsite2 = models.Campsite(
+        availablePersons = 2,
+        parkID = 28,
+        hostID = 2,
+        startDate = datetime(2016,7,26),
+        endDate = datetime(2016,8,31),
+        status = "open"
+    )
+    campsite3 = models.Campsite(
+        availablePersons=2,
+        parkID=30,
+        hostID=3,
+        startDate=datetime(2016, 7, 30),
+        endDate=datetime(2016, 8, 1),
+        status="open"
+    )
+    campsite4 = models.Campsite(
+        availablePersons=2,
+        parkID=31,
+        hostID=4,
+        startDate=datetime(2016, 9, 15),
+        endDate=datetime(2016, 9, 17),
+        status="open"
+    )
+    campsite5 = models.Campsite(
+        availablePersons=2,
+        parkID=51,
+        hostID=5,
+        startDate=datetime(2016, 8, 28),
+        endDate=datetime(2016, 8, 31),
+        status="open"
+    )
+    campsite6 = models.Campsite(
+        availablePersons=2,
+        parkID=51,
+        hostID=4,
+        startDate=datetime(2016, 8, 28),
+        endDate=datetime(2016, 8, 31),
+        status="open"
+    )
+    db.session.add(campsite1)
+    db.session.add(campsite2)
+    db.session.add(campsite3)
+    db.session.add(campsite4)
+    db.session.add(campsite5)
+    db.session.add(campsite6)
     db.session.commit()
 
 @api.route('/createData')
