@@ -78,7 +78,7 @@ python runserver.py
   "parks": [
     {
       "attributes": {...},
-      "geometry": {...}
+      "geometry": {...},
       "campsites": [
         {
           "availablePersons": 3,
