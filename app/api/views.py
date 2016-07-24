@@ -15,6 +15,9 @@ api = Blueprint('api',__name__,template_folder='templates')
 def item_not_found(e):
     return jsonify({"Error": str(e)}), 404
 
+def invalid_parameters(e):
+    return jsonify({"Error": "Invalid parameter: {}".format(e)}), 400
+
 
 def missing_params(e):
     return jsonify({"Error": str(e)}), 400
@@ -105,9 +108,31 @@ def create_data():
 @api.route('/campsites/', methods = ['GET'])
 @api.route('/campsites/<int:campsiteId>/', methods = ['GET'])
 def get_campsites(campsiteId = None):
-    # query params = hostID, parkID, starting location, fids
     try:
         if campsiteId is None:
+            for arg in request.args:
+                if arg not in ['startDate', 'endDate', 'hostID', 'parkID', 'startingLoc', 'fids', 'status', 'availablePersons']:
+                    return invalid_parameters(arg)
+            hostID = None
+            parkID = None
+            startDate = None
+            endDate = None
+            status = None
+            availablePersons = None
+            # Handle the non-spatial query
+            if 'hostID' in request.args:
+                hostID = request.args.get('hostID')
+            if 'parkID' in request.args:
+                parkID = request.args.get('parkID')
+            if 'startDate' in request.args:
+                startDate = request.args.get('startDate')
+            if 'endDate' in request.args:
+                endDate = request.args.get('endDate')
+            if 'status' in request.args:
+                status = request.args.get('status')
+            if 'availablePersons' in request.args:
+                availablePersons = int(request.args.get('availablePersons'))
+            # Handle the spatial query
             if 'startingLoc' in request.args and 'fids' in request.args:
                 x = float(request.args.get('startingLoc').split(',')[0].strip().rstrip())
                 y = float(request.args.get('startingLoc').split(',')[1].strip().rstrip())
@@ -121,17 +146,13 @@ def get_campsites(campsiteId = None):
                     sites.append({
                         "parkID": park_id,
                         "distance": distance,
-                        "campsites": [i.dict() for i in query.get_campsites(park_id=park_id)]
+                        "campsites": [i.dict() for i in query.get_campsites(park_id=park_id, host_id=hostID, startDate=startDate, endDate=endDate, status=status, availablePersons=availablePersons)],
+                        "attributes": feature["attributes"],
+                        "geometry": feature["geometry"]
                     })
                 return jsonify({"parks":sites})
-            if 'hostID' in request.args and 'parkID' in request.args:
-                return jsonify(campsites = [i.dict() for i in query.get_campsites(host_id=request.args.get('hostID'), park_id=request.args.get('parkID'))])
-            elif 'hostID' in request.args:
-                return jsonify(campsites=[i.dict() for i in query.get_campsites(host_id=request.args.get('hostID'))])
-            elif 'parkID' in request.args:
-                return jsonify(campsites=[i.dict() for i in query.get_campsites(park_id=request.args.get('parkID'))])
             else:
-                return jsonify(campsites=[i.dict() for i in query.get_campsites()])
+                return jsonify(campsites=[i.dict() for i in query.get_campsites(host_id=hostID, park_id=parkID, startDate=startDate, endDate=endDate, status=status, availablePersons=availablePersons)])
         else:
             campsite = query.get_campsites(campsiteId).first()
             if campsite is not None:
@@ -145,6 +166,10 @@ def get_campsites(campsiteId = None):
 @api.route('/campsites/<int:campsiteId>/update/', methods = ['POST'])
 def update_campsite(campsiteId = None):
     try:
+        if 'availablePersons' not in request.form: return missing_params('availablePersons')
+        if 'startDate' not in request.form: return missing_params('startDate')
+        if 'endDate' not in request.form: return missing_params('endDate')
+        if 'status' not in request.form: return missing_params('status')
         campsite = query.get_campsite(campsiteId)
         campsite.availablePersons = int(request.form['availablePersons'])
         campsite.startDate = request.form['startDate']
@@ -156,7 +181,7 @@ def update_campsite(campsiteId = None):
         return internal_error(e)
 
 
-@api.route('/campsites/<int:campsiteId>/delete', methods = ['POST'])
+@api.route('/campsites/<int:campsiteId>/delete/', methods = ['POST'])
 def delete_campsite(campsiteId = None):
     campsite = query.get_campsite(campsiteId)
     query.delete(campsite)
@@ -165,6 +190,12 @@ def delete_campsite(campsiteId = None):
 
 @api.route('/campsites/add/', methods = ['POST'])
 def add_campsite():
+    if 'availablePersons' not in request.form: return missing_params('availablePersons')
+    if 'startDate' not in request.form: return missing_params('startDate')
+    if 'endDate' not in request.form: return missing_params('endDate')
+    if 'status' not in request.form: return missing_params('status')
+    if 'hostID' not in request.form: return missing_params('hostID')
+    if 'parkID' not in request.form: return missing_params('parkID')
     if not park_exists(request.form['parkID']):
         item_not_found("Park was not found.")
     campsite = models.Campsite(
@@ -201,6 +232,10 @@ def get_users(userID=None):
 @api.route('/users/<int:userID>/update/', methods = ['POST'])
 def update_user(userID):
     try:
+        if 'email' not in request.form: return missing_params('email')
+        if 'phone' not in request.form: return missing_params('phone')
+        if 'firstName' not in request.form: return missing_params('firstName')
+        if 'lastName' not in request.form: return missing_params('lastName')
         user = query.get_user(userID)
         user.email = request.args.get('email')
         user.phone = request.args.get('phone')
@@ -214,10 +249,17 @@ def update_user(userID):
 
 @api.route('/users/add/', methods = ['POST'])
 def add_user():
+    if 'email' not in request.form: return missing_params('email')
+    if 'phone' not in request.form: return missing_params('phone')
+    if 'firstName' not in request.form: return missing_params('firstName')
+    if 'lastName' not in request.form: return missing_params('lastName')
+    if 'username' not in request.form: return missing_params('username')
+    if 'password' not in request.form: return missing_params('password')
     if username_exists(request.form['username']):
         return already_exists(request.form['username'])
     if email_exists(request.form['email']):
         return already_exists(request.form['email'])
+    #TODO make this not plain text
     user = models.User(
         username=request.form['username'],
         firstName=request.form['firstName'],
@@ -246,7 +288,8 @@ def email_exists(email):
 
 
 def query_parks(objectIds=None):
-    url = "http://dev002023.esri.com/arcgis/rest/services/Parks/Parks/MapServer/0/query"
+    #url = "http://dev002023.esri.com/arcgis/rest/services/Parks/Parks/MapServer/0/query"
+    url = "http://services.arcgis.com/dkFz166a8Pp3vBsS/arcgis/rest/services/SurveyParks2Me/FeatureServer/0/query"
     params = {'f': 'json',
               'outFields': '*'
               }

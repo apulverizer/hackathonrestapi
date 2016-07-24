@@ -31,13 +31,22 @@ def get_campsite(campsite_id):
     return db.session.query(Campsite).filter_by(id=campsite_id).first()
 
 
-def get_campsites(park_id=None, host_id=None):
-    if park_id and host_id:
-        return db.session.query(Campsite).filter_by(parkID=park_id, hostID=host_id)
-    elif park_id:
-        return db.session.query(Campsite).filter_by(parkID=park_id)
-    elif host_id:
-        return db.session.query(Campsite).filter_by(hostID=host_id)
+def get_campsites(park_id=None, host_id=None, startDate=None, endDate=None, status=None, availablePersons=None):
+    filters = []
+    if park_id:
+        filters.append(Campsite.parkID == park_id)
+    if host_id:
+        filters.append(Campsite.hostID == host_id)
+    if status:
+        filters.append(Campsite.status == status)
+    if availablePersons:
+        filters.append(Campsite.availablePersons >= availablePersons)
+    if startDate:
+        filters.append(Campsite.startDate <= datetime.datetime.strptime(startDate,"%m/%d/%Y"))
+    if endDate:
+        filters.append(Campsite.endDate >= datetime.datetime.strptime(endDate,"%m/%d/%Y"))
+    if filters:
+        return db.session.query(Campsite).filter(*filters)
     else:
         return db.session.query(Campsite).all()
 

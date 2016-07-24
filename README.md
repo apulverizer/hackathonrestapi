@@ -29,6 +29,11 @@ python runserver.py
   * No params will return all campsites in the following format
   * hostID=1 - this gets all campsites hosted by the provided userID
   * parkID=1 - this gets all campsites in the provided parkID
+  * startDate=8/1/2016 - this gets all campsites that have a startDate before or equal to this
+  * endDate=8/2/2016 - this gets all campsites that have an endDate after or equal to this
+    You should use these together (e.g startDate=8/1/2016&endDate=8/3/2016) this would return sites that have openings in that range
+  * availablePersons=3 -this gets all campsites that have at least 3 open spots
+  * status=open -this gets campsites that are open, can also query for closed
   ```json
   {
   "campsites": [
@@ -63,10 +68,13 @@ python runserver.py
  ---- 
   
   * startingLoc=x,y&fids=1,2,3 will compute the distance between the starting point and the locations of the parks using fids
+  You can use the other optional parameters (except for parkID as that uses the FIDS) to filter campsites
   ```json
   {
   "parks": [
     {
+      "attributes": {...},
+      "geometry": {...}
       "campsites": [
         {
           "availablePersons": 3,
