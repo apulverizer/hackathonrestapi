@@ -55,13 +55,20 @@ def get_user(userID):
     return db.session.query(User).filter_by(id=userID).first()
 
 
-def get_users(username=None, email=None):
-    if username and email:
-        return db.session.query(User).filter_by(username=username, email=email)
-    elif username:
-        return db.session.query(User).filter_by(username=username)
-    elif email:
-        return db.session.query(User).filter_by(email=email)
+def get_users(username=None, email=None, phone=None, firstName=None, lastName=None):
+    filters = []
+    if username:
+        filters.append(User.username == username)
+    if email:
+        filters.append(User.email == email)
+    if phone:
+        filters.append(User.phone == phone)
+    if firstName:
+        filters.append(User.firstName == firstName)
+    if lastName:
+        filters.append(User.lastName == lastName)
+    if filters:
+        return db.session.query(User).filter(*filters)
     else:
         return db.session.query(User).all()
 

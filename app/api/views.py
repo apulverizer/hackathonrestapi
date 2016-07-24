@@ -218,7 +218,25 @@ def add_campsite():
 def get_users(userID=None):
     try:
         if userID is None:
-            return jsonify(users=[i.dict() for i in query.get_users()])
+            for arg in request.args:
+                if arg not in ['email', 'username', 'firstName', 'lastName', 'phone']:
+                    return invalid_parameters(arg)
+            email = None
+            username = None
+            firstName = None
+            lastName = None
+            phone = None
+            if 'email' in request.args:
+                email = request.args.get('email')
+            if 'username' in request.args:
+                username = request.args.get('username')
+            if 'firstName' in request.args:
+                firstName = request.args.get('firstName')
+            if 'lastName' in request.args:
+                lastName = request.args.get('lastName')
+            if 'phone' in request.args:
+                phone = request.args.get('phone')
+            return jsonify(users=[i.dict() for i in query.get_users(email=email, username=username, firstName=firstName, lastName=lastName, phone=phone)])
         else:
             user = query.get_user(userID)
             if user is not None:

@@ -174,6 +174,33 @@ Returns the campsite info as shown above
 
 ----
 
+* \<host\>:\<port\>/api/users/ GET
+This returns a list of users.
+ * username=apulverizer - this filters by username
+ * firstName=Aaron - this filters by first name
+ * lastName=Pulver -this filters by last name
+ * phone=987654321 - this filters by phone number
+ * email=apulverizer@gmail.com -this filters by email address
+ 
+```json
+ {
+  "users": [
+    {
+      "createdDate": "2016-07-24T02:38:44",
+      "email": "bobthecooluser@gmail.com",
+      "firstName": "Bob",
+      "id": 2,
+      "lastName": "Cool",
+      "modifiedDate": "2016-07-24T02:38:44",
+      "password": "12345",
+      "phone": "987654321",
+      "username": "bobthecooluser",
+      "versionID": 1
+    }
+  ]
+}
+```
+
 * \<host\>:\<port\>/api/users/\<userID\>/
 This returns the users information
 
