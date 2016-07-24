@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from flask import Flask
 from app.api.views import api
 from app.database import db

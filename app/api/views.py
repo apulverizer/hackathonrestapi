@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from flask import jsonify, request, url_for, redirect, abort, g, session, current_app
 from flask import Blueprint, render_template, abort
 import app.query as query

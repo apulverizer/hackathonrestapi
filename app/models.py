@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import json
 import datetime
 from flask import Flask

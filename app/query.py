@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import json
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
